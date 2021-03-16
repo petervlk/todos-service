@@ -1,12 +1,12 @@
 (ns vlko.todos.service
+  (:require [ring.adapter.jetty :refer [run-jetty]])
   (:gen-class))
 
-(defn greet
-  "Callable entry point to the application."
-  [data]
-  (println (str "Hello, " (or (:name data) "World") "!")))
+(defn app [req]
+  {:status 200
+   :body   "Hello, World!"})
 
 (defn -main
-  "I don't do a whole lot ... yet."
   [& args]
-  (greet {:name (first args)}))
+  (run-jetty #'app {:port 3000})
+  )
