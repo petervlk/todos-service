@@ -8,19 +8,25 @@
     (sut/webapp (mock/request http-method path))
     [:status :body]))
 
-(deftest request-handler-test
-  (testing "path: '/'"
+(deftest hello-request-handling
+  (testing "path: '/hello'"
     (is (=
           {:status 200 :body "Hello, World!"}
-          (response-matcher :get "/"))))
+          (response-matcher :get "/hello"))))
 
-  (testing "path: '/:name'"
+  (testing "path: '/hello/:name'"
     (is (=
           {:status 200 :body "Hello, Vlko!"}
-          (response-matcher :get "/Vlko"))))
+          (response-matcher :get "/hello/Vlko")))))
 
+(deftest json-request-handling
+  (testing "path: '/json'"
+    (is (=
+          {:status 200 :body "JSON comming soon"}
+          (response-matcher :get "/json")))))
+
+(deftest undefined-request-handling
   (testing "path: unhandled"
     (is (=
           {:status 404, :body "Nothing here, mate!"}
-          (response-matcher :get "/unhandled/path"))))
-  )
+          (response-matcher :get "/unhandled/path")))))

@@ -9,6 +9,10 @@
 
 
 (defroutes webapp
-           (GET "/" [] (greeting))
-           (GET "/:greetee" [greetee] (greeting greetee))
+           (context "/hello" []
+             (GET "/" [] (greeting))
+             (GET "/:greetee" [greetee] (greeting greetee)))
+
+           (GET "/json" [] "JSON comming soon")             ;TODO - implement json responses
+
            (not-found "Nothing here, mate!"))
