@@ -1,10 +1,7 @@
 (ns vlko.todos.service
-  (:require [ring.adapter.jetty :refer [run-jetty]])
+  (:require [ring.adapter.jetty :refer [run-jetty]]
+            [vlko.todos.handler :refer [app]])
   (:gen-class))
-
-(defn app [_]
-  {:status 200
-   :body   "Hello, World!"})
 
 ; TODO -- move this to run configuration
 (def server-port 3000)

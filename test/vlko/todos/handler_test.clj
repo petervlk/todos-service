@@ -1,6 +1,6 @@
-(ns vlko.todos.service-test
+(ns vlko.todos.handler-test
   (:require [clojure.test :refer :all]
-            [vlko.todos.service :as sut]
+            [vlko.todos.handler :as sut]
             [ring.mock.request :as mock]))
 
 (deftest app-test
