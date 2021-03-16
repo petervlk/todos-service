@@ -19,10 +19,13 @@
   (atom nil))
 
 (defn server-start []
-  "Start web server."
+  "Start web server.
+   Note that a Var is used -- the #' notation -- instead of a bare symbol
+   to make REPL-driven development easier. See the following for details:
+   https://clojure.org/guides/repl/enhancing_your_repl_workflow#writing-repl-friendly-programs "
   (when (nil? @server)
     (println "INFO: Starting server on port " server-port)
-    (reset! server (run-jetty app {:port server-port :join? false}))))
+    (reset! server (run-jetty #'app {:port server-port :join? false}))))
 
 (defn server-stop []
   "Stop web server."
