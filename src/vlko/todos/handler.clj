@@ -1,6 +1,14 @@
-(ns vlko.todos.handler)
+(ns vlko.todos.handler
+  (:require
+    [compojure.core :refer :all]
+    [compojure.route :refer [not-found]]))
 
-(defn app [_]
-  {:status 200
-   :body   "Hello, World!"})
+(defn greeting
+  ([] (greeting "World"))
+  ([greetee] (str "Hello, " greetee "!")))
 
+
+(defroutes webapp
+           (GET "/" [] (greeting))
+           (GET "/:greetee" [greetee] (greeting greetee))
+           (not-found "Nothing here, mate!"))
