@@ -1,0 +1,13 @@
+version: '3.1'
+
+services:
+  db:
+    restart: always
+    image: postgres:13.2
+    ports:
+      - "5000:5432"
+    volumes:
+      - ./db/init_db_data.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=todos
