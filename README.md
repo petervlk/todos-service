@@ -7,7 +7,7 @@ Main idea is to learn/experiment/try different Clojure libs, frameworks and tool
 
 - [x] Build simple web service on top of [Ring](https://github.com/ring-clojure/ring)
 - [x] Implement request routing using Compojure [Compojure](https://github.com/weavejester/compojure)
-- [ ] Access database using [next.jdbc](https://github.com/seancorfield/next-jdbc) 
+- [ ] Access database using [next.jdbc](https://github.com/seancorfield/next-jdbc) and [HoneySql](https://github.com/seancorfield/honeysql)
 - [ ] Use [C3p0](https://github.com/swaldman/c3p0) db connection pool
 - [ ] Use [Component](https://github.com/stuartsierra/component) for app state and components lifecycle management
 - [ ] Use [buddy](https://github.com/funcool/buddy) to secure app
