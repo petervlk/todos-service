@@ -4,7 +4,8 @@ EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE todo_lists
 (
     id        UUID PRIMARY KEY             DEFAULT uuid_generate_v4(),
-    label     VARCHAR(255) UNIQUE NOT NULL
+    label     VARCHAR(255) UNIQUE NOT NULL,
+    timestamp TIMESTAMP           NOT NULL DEFAULT now()
 );
 
 CREATE TABLE todo_items
@@ -13,6 +14,7 @@ CREATE TABLE todo_items
     list_id   UUID                NOT NULL,
     label     VARCHAR(255) UNIQUE NOT NULL,
     completed BOOLEAN             NOT NULL DEFAULT FALSE,
+    timestamp TIMESTAMP           NOT NULL DEFAULT now(),
     FOREIGN KEY (list_id)
         REFERENCES todo_lists (id)
 );
