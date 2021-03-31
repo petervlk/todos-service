@@ -31,5 +31,5 @@ VALUES ((SELECT id FROM todo_lists WHERE label = 'webapp' LIMIT 1), 'configure D
 INSERT INTO todo_items (list_id, label)
 VALUES ((SELECT id FROM todo_lists WHERE label = 'chores' LIMIT 1), 'take out trash');
 
-INSERT INTO todo_items (list_id, label)
-VALUES ((SELECT id FROM todo_lists WHERE label = 'chores' LIMIT 1), 'do the dishes');
+INSERT INTO todo_items (list_id, label, completed)
+VALUES ((SELECT id FROM todo_lists WHERE label = 'chores' LIMIT 1), 'do the dishes', true );
