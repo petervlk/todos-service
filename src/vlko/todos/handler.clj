@@ -2,15 +2,26 @@
   (:require
     [compojure.core :refer :all]
     [compojure.route :refer [not-found]]
-    [ring.middleware.json :refer [wrap-json-response]]
-    [ring.util.response :refer [response]]))
+    [ring.middleware.json :refer [wrap-json-response
+                                  wrap-json-body
+                                  wrap-json-params]]
+    [ring.util.response :refer [response]]
+    [vlko.todos.persistence :as db]))
 
-(defn json-rng-int-handler [_]
-  (response {:random-int (rand-int 100)}))
+(defn handler-item-add [{label :label content :item-content}]
+  (response (db/add-item! label content)))
 
-(comment
-  (json-rng-int-handler))
+(defn handler-item-remove [{label :label}]
+  (response (db/remove-item! label)))
+
+(defn handler-items-show [_]
+  (response (db/items)))
 
 (defroutes webapp
-           (wrap-json-response (GET "/" req (json-rng-int-handler req)))
+           (-> (context "/api" []
+                 (GET "/" req (handler-items-show req))
+                 (POST "/" {data :body} (handler-item-add data))
+                 (DELETE "/" {data :body} (handler-item-remove data)))
+               (wrap-json-body {:keywords? true})
+               (wrap-json-response))
            (not-found "Nothing here, mate!"))
