@@ -31,9 +31,14 @@
     (.stop @server)
     (reset! server nil)))
 
+(defn server-restart []
+  (server-stop)
+  (server-start))
+
 (comment
   (server-start)
   (server-stop)
+  (server-restart)
   @server
   *e)
 
