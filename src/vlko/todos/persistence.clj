@@ -1,18 +1,38 @@
-(ns vlko.todos.persistence)
+(ns vlko.todos.persistence
+  (:require [next.jdbc :as jdbc]
+            [next.jdbc.sql :as sql]))
 
-(defonce ^{:private true} db (atom {}))
+(def db-spec
+  {
+   :dbtype   "postgresql"
+   :host     "localhost"
+   :port     5000
+   :dbname   "todos"
+   :user     "postgres"
+   :password "postgres"
+   })
 
-(defn items [] @db)
+(def ds (jdbc/get-datasource db-spec))
 
-(defn add-item! [k v]
-  (swap! db assoc k v))
+(defn db-insert-item [k v]
+  ;(jdbc/execute-one!
+  ;  ds
+  ;  ["INSERT INTO todo_simple_items (label, content) VALUES (?, ?)" k v]
+  ;  {:return-keys true})
+  (sql/insert! ds :todo_simple_items {:label k :content v}))
 
-(defn remove-item! [k]
-  (swap! db dissoc k))
+(defn db-delete-item [k]
+  ;(jdbc/execute-one!
+  ; ds
+  ; ["DELETE FROM todo_simple_items WHERE label = ?" k])
+  (sql/delete! ds :todo_simple_items {:label k}))
+
+(defn db-show-simple-items []
+  (sql/query ds ["SELECT * FROM todo_simple_items"]))
 
 (comment
-  (items)
-  (add-item! :vlko "was here")
-  (remove-item! "")
+  (db-insert-item "123" "sfadfs")
+  (db-delete-item "123")
+  (db-show-simple-items)
   *e
   )

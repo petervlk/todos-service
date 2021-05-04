@@ -9,13 +9,13 @@
     [vlko.todos.persistence :as db]))
 
 (defn handler-item-add [{label :label content :item-content}]
-  (response (db/add-item! label content)))
+  (response (db/db-insert-item label content)))
 
 (defn handler-item-remove [{label :label}]
-  (response (db/remove-item! label)))
+  (response (db/db-delete-item label)))
 
 (defn handler-items-show [_]
-  (response (db/items)))
+  (response (db/db-show-simple-items)))
 
 (defroutes webapp
            (-> (context "/api" []
