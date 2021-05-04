@@ -1,27 +1,52 @@
 (ns vlko.todos.handler
   (:require
-    [compojure.core :refer :all]
-    [compojure.route :refer [not-found]]
-    [ring.middleware.json :refer [wrap-json-response
-                                  wrap-json-body
-                                  wrap-json-params]]
-    [ring.util.response :refer [response]]
+    [muuntaja.core :as m]
+    [reitit.ring :as ring]
+    [reitit.ring.middleware.exception :as exception]
+    [reitit.ring.middleware.muuntaja :as muuntaja]
+    [vlko.todos.middleware :as mw]
     [vlko.todos.persistence :as db]))
 
-(defn handler-item-add [{label :label content :item-content}]
-  (response (db/db-insert-item label content)))
+(defn response-ok [body]
+  {:status 200 :body body})
 
-(defn handler-item-remove [{label :label}]
-  (response (db/db-delete-item label)))
+(defn handler-ok [_]
+  (response-ok "ok"))
 
-(defn handler-items-show [_]
-  (response (db/db-show-simple-items)))
+(defn handler-show-todos [{data-source :db}]
+  (response-ok (db/db-show-simple-items data-source)))
 
-(defroutes webapp
-           (-> (context "/api" []
-                 (GET "/" req (handler-items-show req))
-                 (POST "/" {data :body} (handler-item-add data))
-                 (DELETE "/" {data :body} (handler-item-remove data)))
-               (wrap-json-body {:keywords? true})
-               (wrap-json-response))
-           (not-found "Nothing here, mate!"))
+(defn handler-add-todo [{data-source :db {:keys [label item-content]} :body-params}]
+  (response-ok (db/db-insert-item data-source label item-content)))
+
+(defn handler-remove-todo [{data-source :db {:keys [label]} :body-params}]
+  (response-ok (db/db-delete-item data-source label)))
+
+(def routes
+  [["/api"
+    {:name   ::todos-api
+     :get    {:handler handler-show-todos}
+     :post   {:handler handler-add-todo}
+     :delete {:handler handler-remove-todo}}]
+   ["/health-check"
+    {:name ::ping
+     :get  {:handler handler-ok}}]])
+
+(def router
+  (ring/router routes
+               {:data {:db         db/data-source
+                       :muuntaja   m/instance
+                       :middleware [muuntaja/format-negotiate-middleware
+                                    muuntaja/format-response-middleware
+                                    exception/exception-middleware
+                                    muuntaja/format-request-middleware
+                                    mw/db-middleware]}}))
+
+(def webapp
+  (ring/ring-handler
+    router
+    (ring/create-default-handler
+      {:not-found          (constantly {:status 404, :body "Nothing here"})
+       :method-not-allowed (constantly {:status 405, :body "Not allowed"})
+       :not-acceptable     (constantly {:status 406, :body "Not acceptable"})})))
+

@@ -5,7 +5,7 @@
 
 (defn response-matcher [http-method path]
   (select-keys
-    (sut/webapp (mock/request http-method path))
+    (sut/app (mock/request http-method path))
     [:status :body]))
 
 (deftest hello-request-handling
