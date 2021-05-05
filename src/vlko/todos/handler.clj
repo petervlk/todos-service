@@ -42,7 +42,7 @@
                                     muuntaja/format-request-middleware
                                     mw/db-middleware]}}))
 
-(def webapp
+(def app
   (ring/ring-handler
     router
     (ring/create-default-handler

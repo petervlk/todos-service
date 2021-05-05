@@ -1,6 +1,6 @@
 (ns vlko.todos.service
   (:require [ring.adapter.jetty :refer [run-jetty]]
-            [vlko.todos.handler :refer [webapp]])
+            [vlko.todos.handler :refer [app]])
   (:gen-class))
 
 ; TODO -- move this to run configuration
@@ -22,7 +22,7 @@
    https://clojure.org/guides/repl/enhancing_your_repl_workflow#writing-repl-friendly-programs "
   (when (nil? @server)
     (println "INFO: Starting server on port " server-port)
-    (reset! server (run-jetty #'webapp {:port server-port :join? false}))))
+    (reset! server (run-jetty #'app {:port server-port :join? false}))))
 
 (defn server-stop []
   "Stop web server."
