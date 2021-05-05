@@ -4,7 +4,8 @@
          seancorfield/next.jdbc    {:mvn/version "1.1.646"}
          org.postgresql/postgresql {:mvn/version "42.2.12"}
          metosin/reitit            {:mvn/version "0.5.13"}
-         }
+         integrant/integrant       {:mvn/version "0.8.0"}
+         integrant/repl            {:mvn/version "0.3.2"}}
  :aliases
         {:run     {:main-opts ["-m" "vlko.todos.service"]}
          :test    {:extra-paths ["test"]

@@ -32,21 +32,17 @@
     {:name ::ping
      :get  {:handler handler-ok}}]])
 
-(def router
-  (ring/router routes
-               {:data {:db         db/data-source
-                       :muuntaja   m/instance
-                       :middleware [muuntaja/format-negotiate-middleware
-                                    muuntaja/format-response-middleware
-                                    exception/exception-middleware
-                                    muuntaja/format-request-middleware
-                                    mw/db-middleware]}}))
-
-(def app
+(defn create-app [db]
   (ring/ring-handler
-    router
+    (ring/router routes
+                 {:data {:db         db
+                         :muuntaja   m/instance
+                         :middleware [muuntaja/format-negotiate-middleware
+                                      muuntaja/format-response-middleware
+                                      exception/exception-middleware
+                                      muuntaja/format-request-middleware
+                                      mw/db-middleware]}})
     (ring/create-default-handler
       {:not-found          (constantly {:status 404, :body "Nothing here"})
        :method-not-allowed (constantly {:status 405, :body "Not allowed"})
        :not-acceptable     (constantly {:status 406, :body "Not acceptable"})})))
-
